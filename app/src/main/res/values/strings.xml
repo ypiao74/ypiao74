@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Qwen3_Omni_Mobile</string>
+    <string name="dashscope_api_key">你的API Key</string>
+</resources>

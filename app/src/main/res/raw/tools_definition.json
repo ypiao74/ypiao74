@@ -1,0 +1,37 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "window_control",
+      "description": "车窗控制工具，用于控制车窗的升降/开关",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string",
+                "enum": ["升起", "降下", "打开", "关闭"]
+              },
+              "position": {
+                "type": "string",
+                "enum": ["前左", "前右", "后左", "后右", "全部"]
+              }
+            },
+            "required": ["operation", "position"]
+          },
+          "domain": {
+            "type": "string",
+            "const": "vehicleControl"
+          },
+          "intent": {
+            "type": "string",
+            "const": "window"
+          }
+        },
+        "required": ["content", "domain", "intent"]
+      }
+    }
+  }
+]

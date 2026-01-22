@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- 允许对Qwen3-Omni-Mobile API服务器的HTTP（明文）通信 -->
+    <!-- 注意：对于IP地址，不需要includeSubdomains属性 -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain>8.130.209.214</domain>
+    </domain-config>
+    <!-- 保留旧IP地址配置以兼容 -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain>8.130.139.178</domain>
+    </domain-config>
+</network-security-config>

@@ -1,0 +1,119 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 配置切换开关 -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="8dp">
+        
+        <TextView
+            android:text="Mobile/Flash模型"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="16sp"/>
+        
+        <Switch
+            android:id="@+id/switch_config_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <!-- 发音人选择 -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="8dp">
+        
+        <TextView
+            android:text="发音人"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="16sp"/>
+        
+        <Spinner
+            android:id="@+id/spinner_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="120dp"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_start"
+        android:text="开始录音"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_stop"
+        android:text="停止录音"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    
+    <Button
+        android:id="@+id/btn_pick_image"
+        android:text="选择图片并发送"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    
+    <Button
+        android:id="@+id/btn_pick_video"
+        android:text="选择视频并发送"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    
+    <!-- 视频预览区域 -->
+    <ScrollView
+        android:id="@+id/video_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:maxHeight="600dp">
+        
+        <LinearLayout
+            android:id="@+id/video_container"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+    </ScrollView>
+    
+    <Button
+        android:id="@+id/btn_summary"
+        android:text="停止录音"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    <!-- 图片预览区域 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:maxHeight="300dp">
+        
+        <LinearLayout
+            android:id="@+id/image_container"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:text="等待操作"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"/>
+</LinearLayout>

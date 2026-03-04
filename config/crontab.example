@@ -1,0 +1,14 @@
+# OpenClaw Agent Cluster Cron Jobs
+# 安装方法：crontab /path/to/this/file
+
+# 每 10 分钟监控智能体任务状态
+*/10 * * * * /home/admin/.openclaw/workspace/scripts/monitor-cron.sh >> /home/admin/.openclaw/workspace/logs/cron.log 2>&1
+
+# 每天早上 8 点扫描 Sentry 错误日志，派生修复智能体
+0 8 * * * /home/admin/.openclaw/workspace/scripts/zoe-orchestrator.sh scan-sentry >> /home/admin/.openclaw/workspace/logs/sentry-scan.log 2>&1
+
+# 每天晚上 10 点清理孤立的 worktree
+0 22 * * * /home/admin/.openclaw/workspace/scripts/cleanup-worktrees.sh >> /home/admin/.openclaw/workspace/logs/cleanup.log 2>&1
+
+# 每周一早上 9 点生成周报
+0 9 * * 1 /home/admin/.openclaw/workspace/scripts/weekly-report.sh >> /home/admin/.openclaw/workspace/logs/weekly.log 2>&1

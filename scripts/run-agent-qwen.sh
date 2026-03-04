@@ -66,29 +66,32 @@ $(find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.json" \) | head -2
 # 调用 Qwen-Coder API
 log "Calling Qwen-Coder API..."
 
+# 创建临时 JSON 文件
+cat > /tmp/qwen-prompt.json << EOFJ
+{
+  "model": "qwen-coder-plus",
+  "input": {
+    "messages": [
+      {
+        "role": "system",
+        "content": "你是一个专业的 AI 编程助手，擅长 TypeScript、React、Node.js 开发。你会生成高质量、可维护的代码。"
+      },
+      {
+        "role": "user",
+        "content": "创建一个 React 组件：$TASK_ID"
+      }
+    ]
+  },
+  "parameters": {
+    "max_tokens": 2000
+  }
+}
+EOFJ
+
 RESPONSE=$(curl -s -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H "Content-Type: application/json" \
-    -d "{
-        \"model\": \"qwen-coder-plus\",
-        \"input\": {
-            \"messages\": [
-                {
-                    \"role\": \"system\",
-                    \"content\": \"你是一个专业的 AI 编程助手，擅长 TypeScript、React、Node.js 开发。你会生成高质量、可维护的代码。\"
-                },
-                {
-                    \"role\": \"user\",
-                    \"content\": \"$PROMPT\"
-                }
-            ]
-        },
-        \"parameters\": {
-            \"max_tokens\": 4000,
-            \"temperature\": 0.7,
-            \"top_p\": 0.9
-        }
-    }")
+    -d @/tmp/qwen-prompt.json)
 
 # 解析响应
 if echo "$RESPONSE" | jq -e '.output.choices[0].message.content' > /dev/null 2>&1; then

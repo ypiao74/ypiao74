@@ -14,3 +14,9 @@
 [2026-03-04 12:07:24] Cleaned up old task: feat-hello
 [2026-03-04 12:07:24] Cleaned up old task: feat-demo
 [2026-03-04 12:07:24] Monitoring loop completed
+[2026-03-04 15:30:20] Spawning qwen agent for task: hello-world
+[2026-03-04 15:30:20] Agent spawned: agent-hello-world
+[2026-03-04 15:36:07] Spawning qwen agent for task: counter
+[2026-03-04 15:36:07] Agent spawned: agent-counter
+[2026-03-04 15:41:43] Spawning qwen agent for task: android-hello
+[2026-03-04 15:41:43] Agent spawned: agent-android-hello

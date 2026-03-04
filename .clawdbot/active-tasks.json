@@ -19,6 +19,39 @@
       "startedAt": 1772597220,
       "status": "running",
       "notifyOnComplete": true
+    },
+    {
+      "id": "hello-world",
+      "tmuxSession": "agent-hello-world",
+      "agent": "qwen",
+      "description": "创建一个 Hello World React 组件，包含按钮和欢迎消息",
+      "branch": "feat/hello-world",
+      "startedAt": 1772609420,
+      "status": "done",
+      "notifyOnComplete": true,
+      "completedAt": 1772609500
+    },
+    {
+      "id": "counter",
+      "tmuxSession": "agent-counter",
+      "agent": "qwen",
+      "description": "创建一个 React 计数器组件，包含增加、减少和重置按钮",
+      "branch": "feat/counter",
+      "startedAt": 1772609767,
+      "status": "done",
+      "notifyOnComplete": true,
+      "completedAt": 1772609800
+    },
+    {
+      "id": "android-hello",
+      "tmuxSession": "agent-android-hello",
+      "agent": "qwen",
+      "description": "用 Android Kotlin 创建一个 Hello World 应用程序，包含 MainActivity 和布局文件",
+      "branch": "feat/android-hello",
+      "startedAt": 1772610103,
+      "status": "done",
+      "notifyOnComplete": true,
+      "completedAt": 1772610100
     }
   ],
   "metadata": {

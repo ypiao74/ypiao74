@@ -110,9 +110,15 @@ case "$AGENT_TYPE" in
         fi
         ;;
     
+    qwen)
+        # Qwen-Coder (DashScope)
+        log "Launching Qwen-Coder agent..."
+        "$WORKSPACE/scripts/run-agent-qwen.sh" qwen "$TASK_ID"
+        ;;
+    
     *)
-        log "Unknown agent type: $AGENT_TYPE"
-        exit 1
+        log "Unknown agent type: $AGENT_TYPE, defaulting to Qwen-Coder"
+        "$WORKSPACE/scripts/run-agent-qwen.sh" qwen "$TASK_ID"
         ;;
 esac
 

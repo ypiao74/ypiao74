@@ -1,0 +1,80 @@
+.hello-world-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+}
+
+.hello-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 500px;
+  transition: transform 0.3s ease;
+}
+
+.hello-card.animating {
+  transform: scale(1.05);
+}
+
+.hello-title {
+  font-size: 2.5rem;
+  color: #1a1a2e;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+}
+
+.hello-subtitle {
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin: 0 0 2rem 0;
+}
+
+.hello-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.hello-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.hello-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.hello-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.hello-stats {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #f3f4f6;
+  color: #9ca3af;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 480px) {
+  .hello-card {
+    padding: 2rem;
+  }
+  
+  .hello-title {
+    font-size: 2rem;
+  }
+}

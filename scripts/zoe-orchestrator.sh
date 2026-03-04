@@ -27,9 +27,18 @@ spawn_agent() {
     
     # 创建 git worktree
     cd "$WORKSPACE"
-    git worktree add "$WORKTREES_DIR/$branch_name" -b "$branch_name" origin/main 2>/dev/null || {
-        log "Worktree already exists, reusing..."
-    }
+    
+    # 检查是否有远程仓库
+    if git remote | grep -q origin; then
+        git worktree add "$WORKTREES_DIR/$branch_name" -b "$branch_name" origin/main 2>/dev/null || {
+            log "Worktree already exists, reusing..."
+        }
+    else
+        # 没有远程仓库，基于当前分支创建
+        git worktree add "$WORKTREES_DIR/$branch_name" -b "$branch_name" 2>/dev/null || {
+            log "Worktree already exists, reusing..."
+        }
+    fi
     
     # 创建 tmux 会话
     local session_name="agent-$task_id"

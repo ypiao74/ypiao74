@@ -1,5 +1,26 @@
 {
-  "tasks": [],
+  "tasks": [
+    {
+      "id": "feat-test",
+      "tmuxSession": "agent-feat-test",
+      "agent": "codex",
+      "description": "测试 tmux 会话保持",
+      "branch": "feat/test",
+      "startedAt": 1772597062,
+      "status": "running",
+      "notifyOnComplete": true
+    },
+    {
+      "id": "user-registration",
+      "tmuxSession": "agent-user-registration",
+      "agent": "codex",
+      "description": "实现用户注册功能：API + 表单 + 验证",
+      "branch": "feat/user-registration",
+      "startedAt": 1772597220,
+      "status": "running",
+      "notifyOnComplete": true
+    }
+  ],
   "metadata": {
     "version": "1.0",
     "createdAt": "2026-03-04",

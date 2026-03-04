@@ -27,10 +27,22 @@ case "$AGENT_TYPE" in
             log "Codex CLI not found, running in simulation mode..."
             # 模拟 Codex 工作流程
             log "Reading task context..."
+            sleep 2
             log "Analyzing codebase..."
+            sleep 2
             log "Implementing changes..."
+            sleep 2
             log "Running tests..."
+            sleep 2
             log "Creating PR..."
+            # 保持会话活跃，等待进一步指令
+            log "Agent idle. Send instructions or 'exit' to stop."
+            while true; do
+                read -t 60 input || true
+                if [ "$input" == "exit" ]; then
+                    break
+                fi
+            done
         fi
         ;;
     
@@ -42,10 +54,21 @@ case "$AGENT_TYPE" in
         else
             log "Claude Code CLI not found, running in simulation mode..."
             log "Reading task context..."
+            sleep 2
             log "Analyzing codebase..."
+            sleep 2
             log "Implementing changes..."
+            sleep 2
             log "Running tests..."
+            sleep 2
             log "Creating PR..."
+            log "Agent idle. Send instructions or 'exit' to stop."
+            while true; do
+                read -t 60 input || true
+                if [ "$input" == "exit" ]; then
+                    break
+                fi
+            done
         fi
         ;;
     
@@ -57,7 +80,15 @@ case "$AGENT_TYPE" in
         else
             log "Gemini CLI not found, running in simulation mode..."
             log "Generating design specs..."
+            sleep 2
             log "Creating HTML/CSS mockup..."
+            log "Agent idle. Send instructions or 'exit' to stop."
+            while true; do
+                read -t 60 input || true
+                if [ "$input" == "exit" ]; then
+                    break
+                fi
+            done
         fi
         ;;
     

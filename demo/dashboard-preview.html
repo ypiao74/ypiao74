@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户仪表盘 - OpenClaw</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f3f4f6; }
+    
+    /* Sidebar */
+    .sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      color: #ffffff; padding: 1.5rem; display: flex; flex-direction: column;
+    }
+    .logo { font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.5rem; }
+    .nav-menu { list-style: none; flex: 1; }
+    .nav-menu li { margin-bottom: 0.5rem; }
+    .nav-menu a {
+      display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem;
+      color: #9ca3af; text-decoration: none; border-radius: 8px; transition: all 0.2s;
+    }
+    .nav-menu a:hover, .nav-menu a.active { background: #374151; color: #ffffff; }
+    .nav-menu .icon { font-size: 1.25rem; }
+    .user-mini {
+      display: flex; align-items: center; gap: 0.75rem; padding-top: 1rem;
+      border-top: 1px solid #374151;
+    }
+    .avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex; align-items: center; justify-content: center; font-weight: 700;
+    }
+    .user-info { flex: 1; }
+    .user-info .name { font-weight: 600; font-size: 0.95rem; }
+    .user-info .email { font-size: 0.8rem; color: #9ca3af; }
+    
+    /* Main Content */
+    .main { margin-left: 260px; padding: 2rem; }
+    .header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
+    }
+    .header h1 { font-size: 1.75rem; color: #1f2937; }
+    .header-actions { display: flex; gap: 1rem; }
+    .btn {
+      padding: 0.625rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; border: none;
+    }
+    .btn-primary { background: #4f46e5; color: white; }
+    .btn-primary:hover { background: #4338ca; }
+    .btn-outline { background: white; border: 2px solid #e5e7eb; color: #374151; }
+    .btn-outline:hover { border-color: #4f46e5; }
+    
+    /* Stats Cards */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem; margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: white; padding: 1.5rem; border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .stat-card .label { font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem; }
+    .stat-card .value { font-size: 2rem; font-weight: 700; color: #1f2937; }
+    .stat-card .change { font-size: 0.875rem; margin-top: 0.5rem; }
+    .stat-card .change.up { color: #10b981; }
+    .stat-card .change.down { color: #ef4444; }
+    
+    /* Recent Activity */
+    .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+    .card-header {
+      padding: 1.25rem 1.5rem; border-bottom: 1px solid #e5e7eb;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .card-header h2 { font-size: 1.125rem; color: #1f2937; }
+    .card-body { padding: 1.5rem; }
+    
+    /* Activity List */
+    .activity-list { list-style: none; }
+    .activity-item {
+      display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #f3f4f6;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+    }
+    .activity-icon.blue { background: #dbeafe; }
+    .activity-icon.green { background: #d1fae5; }
+    .activity-icon.yellow { background: #fef3c7; }
+    .activity-icon.purple { background: #e9d5ff; }
+    .activity-content { flex: 1; }
+    .activity-content .title { font-weight: 600; color: #1f2937; margin-bottom: 0.25rem; }
+    .activity-content .desc { font-size: 0.875rem; color: #6b7280; }
+    .activity-time { font-size: 0.8rem; color: #9ca3af; white-space: nowrap; }
+    
+    /* Profile Section */
+    .profile-grid { display: grid; grid-template-columns: 200px 1fr; gap: 2rem; }
+    .profile-avatar {
+      width: 200px; height: 200px; border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem; color: white; font-weight: 700; margin: 0 auto;
+    }
+    .profile-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .detail-group { }
+    .detail-group label { font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem; }
+    .detail-group .value { font-size: 1rem; color: #1f2937; font-weight: 500; }
+    
+    /* Logout Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      display: none; align-items: center; justify-content: center; z-index: 1000;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: white; padding: 2rem; border-radius: 12px; max-width: 400px; width: 90%;
+      text-align: center;
+    }
+    .modal h2 { margin-bottom: 0.5rem; }
+    .modal p { color: #6b7280; margin-bottom: 1.5rem; }
+    .modal-buttons { display: flex; gap: 1rem; justify-content: center; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-secondary { background: #e5e7eb; color: #374151; }
+    
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .profile-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">🚀 OpenClaw</div>
+    <ul class="nav-menu">
+      <li><a href="#" class="active"><span class="icon">📊</span> Dashboard</a></li>
+      <li><a href="#"><span class="icon">📁</span> Projects</a></li>
+      <li><a href="#"><span class="icon">👥</span> Team</a></li>
+      <li><a href="#"><span class="icon">📅</span> Calendar</a></li>
+      <li><a href="#"><span class="icon">⚙️</span> Settings</a></li>
+    </ul>
+    <div class="user-mini">
+      <div class="avatar" id="sidebarAvatar">U</div>
+      <div class="user-info">
+        <div class="name" id="sidebarName">User</div>
+        <div class="email" id="sidebarEmail">user@example.com</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="header">
+      <h1>Welcome back, <span id="headerName">User</span>! 👋</h1>
+      <div class="header-actions">
+        <button class="btn btn-outline" onclick="alert('Notifications')">🔔 Notifications</button>
+        <button class="btn btn-primary" onclick="alert('Create new project')">+ New Project</button>
+        <button class="btn btn-outline" onclick="showLogoutModal()">🚪 Logout</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Total Projects</div>
+        <div class="value">12</div>
+        <div class="change up">↑ 2 new this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Tasks Completed</div>
+        <div class="value">847</div>
+        <div class="change up">↑ 23 today</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Team Members</div>
+        <div class="value">8</div>
+        <div class="change up">↑ 1 this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Hours Tracked</div>
+        <div class="value">156</div>
+        <div class="change down">↓ 12 from last week</div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Recent Activity</h2>
+        <button class="btn btn-outline" onclick="alert('View all')">View All</button>
+      </div>
+      <div class="card-body">
+        <ul class="activity-list">
+          <li class="activity-item">
+            <div class="activity-icon blue">📝</div>
+            <div class="activity-content">
+              <div class="title">Created new project "E-commerce Platform"</div>
+              <div class="desc">Initial setup with React and Node.js</div>
+            </div>
+            <div class="activity-time">2 min ago</div>
+          </li>
+          <li class="activity-item">
+            <div class="activity-icon green">✅</div>
+            <div class="activity-content">
+              <div class="title">Completed task "User Authentication"</div>
+              <div class="desc">Implemented login, register, and password reset</div>
+            </div>
+            <div class="activity-time">1 hour ago</div>
+          </li>
+          <li class="activity-item">
+            <div class="activity-icon yellow">🐛</div>
+            <div class="activity-content">
+              <div class="title">Fixed bug in payment module</div>
+              <div class="desc">Resolved issue with Stripe webhook</div>
+            </div>
+            <div class="activity-time">3 hours ago</div>
+          </li>
+          <li class="activity-item">
+            <div class="activity-icon purple">👤</div>
+            <div class="activity-content">
+              <div class="title">New team member joined</div>
+              <div class="desc">Welcome Sarah as Frontend Developer</div>
+            </div>
+            <div class="activity-time">Yesterday</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Profile Preview -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Your Profile</h2>
+        <button class="btn btn-outline" onclick="alert('Edit profile')">Edit</button>
+      </div>
+      <div class="card-body">
+        <div class="profile-grid">
+          <div class="profile-avatar" id="profileAvatar">U</div>
+          <div class="profile-details">
+            <div class="detail-group">
+              <label>Username</label>
+              <div class="value" id="profileUsername">user</div>
+            </div>
+            <div class="detail-group">
+              <label>Email</label>
+              <div class="value" id="profileEmail">user@example.com</div>
+            </div>
+            <div class="detail-group">
+              <label>Member Since</label>
+              <div class="value">March 2026</div>
+            </div>
+            <div class="detail-group">
+              <label>Account Type</label>
+              <div class="value">🌟 Pro Plan</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Logout Modal -->
+  <div class="modal-overlay" id="logoutModal">
+    <div class="modal">
+      <h2>Logout?</h2>
+      <p>Are you sure you want to logout from your account?</p>
+      <div class="modal-buttons">
+        <button class="btn btn-secondary" onclick="hideLogoutModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="performLogout()">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mock user data
+    const user = {
+      username: 'testuser',
+      email: 'test@example.com',
+      name: 'Test User'
+    };
+
+    // Initialize dashboard
+    function initDashboard() {
+      const initial = user.username.charAt(0).toUpperCase();
+      document.getElementById('sidebarAvatar').textContent = initial;
+      document.getElementById('sidebarName').textContent = user.name;
+      document.getElementById('sidebarEmail').textContent = user.email;
+      document.getElementById('headerName').textContent = user.name.split(' ')[0];
+      document.getElementById('profileAvatar').textContent = initial;
+      document.getElementById('profileUsername').textContent = user.username;
+      document.getElementById('profileEmail').textContent = user.email;
+    }
+
+    function showLogoutModal() {
+      document.getElementById('logoutModal').classList.add('active');
+    }
+
+    function hideLogoutModal() {
+      document.getElementById('logoutModal').classList.remove('active');
+    }
+
+    function performLogout() {
+      alert('Logging out... Redirecting to login page.');
+      hideLogoutModal();
+    }
+
+    initDashboard();
+  </script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注册界面 - OpenClaw</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      padding: 1rem;
+    }
+    .register-container { max-width: 450px; width: 100%; }
+    .register-form {
+      background: #ffffff;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    .register-header { text-align: center; margin-bottom: 2rem; }
+    .register-header h1 {
+      font-size: 1.75rem; font-weight: 700; color: #1a1a2e; margin: 0 0 0.5rem 0;
+    }
+    .register-header p { color: #6b7280; font-size: 0.95rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label {
+      display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;
+    }
+    .form-group input {
+      width: 100%; padding: 0.75rem 1rem; font-size: 1rem;
+      border: 2px solid #e5e7eb; border-radius: 8px; transition: all 0.2s ease;
+    }
+    .form-group input:focus {
+      outline: none; border-color: #11998e; box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+    }
+    .error-message { color: #ef4444; font-size: 0.8rem; margin-top: 0.375rem; display: none; }
+    .error-message.visible { display: block; }
+    .password-strength {
+      height: 4px; background: #e5e7eb; border-radius: 2px; margin-top: 0.5rem; overflow: hidden;
+    }
+    .password-strength-bar {
+      height: 100%; width: 0%; transition: all 0.3s ease; border-radius: 2px;
+    }
+    .password-strength-bar.weak { width: 25%; background: #ef4444; }
+    .password-strength-bar.fair { width: 50%; background: #f59e0b; }
+    .password-strength-bar.good { width: 75%; background: #3b82f6; }
+    .password-strength-bar.strong { width: 100%; background: #10b981; }
+    .password-requirements {
+      font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem;
+    }
+    .password-requirements ul { padding-left: 1rem; margin-top: 0.25rem; }
+    .password-requirements li { margin-bottom: 0.25rem; }
+    .password-requirements li.met { color: #10b981; }
+    .password-requirements li.unmet { color: #9ca3af; }
+    .submit-button {
+      width: 100%; padding: 0.875rem 1.5rem; font-size: 1rem; font-weight: 600; color: #ffffff;
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    .submit-button:hover:not(:disabled) {
+      transform: translateY(-1px); box-shadow: 0 4px 12px rgba(17, 153, 142, 0.4);
+    }
+    .submit-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .spinner {
+      width: 1rem; height: 1rem; border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #ffffff; border-radius: 50%; animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .login-link { text-align: center; margin-top: 1.5rem; color: #6b7280; font-size: 0.95rem; }
+    .login-link button {
+      background: none; border: none; color: #11998e; font-weight: 600;
+      cursor: pointer; padding: 0; font-size: inherit;
+    }
+    .login-link button:hover { color: #0e7c72; text-decoration: underline; }
+    .register-footer {
+      text-align: center; margin-top: 2rem; padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.3);
+    }
+    .register-footer p { color: rgba(255,255,255,0.8); font-size: 0.8rem; }
+    .success-container { text-align: center; padding: 2rem; }
+    .success-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .success-container h2 { color: #1a1a2e; margin-bottom: 0.5rem; }
+    .success-container p { color: #6b7280; margin-bottom: 1.5rem; }
+    .terms {
+      font-size: 0.8rem; color: #6b7280; margin-bottom: 1.5rem; text-align: center;
+    }
+    .terms a { color: #11998e; text-decoration: underline; }
+    @media (max-width: 480px) {
+      .register-container { padding: 0; }
+      .register-form { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <form class="register-form" id="registerForm">
+      <div class="register-header">
+        <h1>Create Account</h1>
+        <p>Join us today and get started</p>
+      </div>
+
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input id="username" type="text" placeholder="Choose a username" autocomplete="username" />
+        <span class="error-message" id="usernameError"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email" />
+        <span class="error-message" id="emailError"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Create a strong password" autocomplete="new-password" />
+        <div class="password-strength">
+          <div class="password-strength-bar" id="strengthBar"></div>
+        </div>
+        <div class="password-requirements" id="passwordRequirements">
+          <ul>
+            <li id="req-length">At least 8 characters</li>
+            <li id="req-upper">One uppercase letter</li>
+            <li id="req-lower">One lowercase letter</li>
+            <li id="req-number">One number</li>
+          </ul>
+        </div>
+        <span class="error-message" id="passwordError"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input id="confirmPassword" type="password" placeholder="Confirm your password" autocomplete="new-password" />
+        <span class="error-message" id="confirmError"></span>
+      </div>
+
+      <p class="terms">
+        By registering, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+      </p>
+
+      <div class="error-banner" id="errorBanner" style="display:none; background:#fef2f2; border:1px solid #fecaca; color:#dc2626; padding:0.875rem; border-radius:8px; margin-bottom:1.5rem; font-size:0.875rem;"></div>
+
+      <button type="submit" class="submit-button" id="submitBtn">
+        Create Account
+      </button>
+
+      <p class="login-link">
+        Already have an account? <button type="button" id="loginBtn">Sign in</button>
+      </p>
+    </form>
+
+    <div class="register-form success-container" id="successContainer" style="display: none;">
+      <div class="success-icon">✅</div>
+      <h2>Account Created!</h2>
+      <p>Welcome aboard, <span id="usernameDisplay"></span>!</p>
+      <p style="color: #10b981; font-weight: 600;">Check your email to verify your account.</p>
+      <button class="submit-button" id="continueBtn" style="margin-top: 1.5rem;">Continue to Dashboard</button>
+    </div>
+
+    <div class="register-footer">
+      <p>🔒 Your data is protected with industry-standard encryption</p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const confirmInput = document.getElementById('confirmPassword');
+    const strengthBar = document.getElementById('strengthBar');
+    const submitBtn = document.getElementById('submitBtn');
+    const successContainer = document.getElementById('successContainer');
+    const usernameDisplay = document.getElementById('usernameDisplay');
+
+    function validateUsername(username) {
+      if (!username || username.trim().length < 3) return 'Username must be at least 3 characters';
+      if (username.length > 30) return 'Username must be less than 30 characters';
+      if (!/^[a-zA-Z0-9_]+$/.test(username)) return 'Username can only contain letters, numbers, and underscores';
+      return null;
+    }
+
+    function validateEmail(email) {
+      if (!email || email.trim().length === 0) return 'Email is required';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return 'Please enter a valid email address';
+      return null;
+    }
+
+    function getPasswordStrength(password) {
+      let score = 0;
+      if (password.length >= 8) score++;
+      if (/[A-Z]/.test(password)) score++;
+      if (/[a-z]/.test(password)) score++;
+      if (/[0-9]/.test(password)) score++;
+      if (/[^a-zA-Z0-9]/.test(password)) score++;
+      return score;
+    }
+
+    function updateStrengthIndicator(password) {
+      const strength = getPasswordStrength(password);
+      strengthBar.className = 'password-strength-bar';
+      if (strength <= 1) strengthBar.classList.add('weak');
+      else if (strength === 2) strengthBar.classList.add('fair');
+      else if (strength === 3) strengthBar.classList.add('good');
+      else if (strength >= 4) strengthBar.classList.add('strong');
+
+      document.getElementById('req-length').className = password.length >= 8 ? 'met' : 'unmet';
+      document.getElementById('req-upper').className = /[A-Z]/.test(password) ? 'met' : 'unmet';
+      document.getElementById('req-lower').className = /[a-z]/.test(password) ? 'met' : 'unmet';
+      document.getElementById('req-number').className = /[0-9]/.test(password) ? 'met' : 'unmet';
+    }
+
+    function showError(id, message) {
+      const el = document.getElementById(id);
+      el.textContent = message;
+      el.classList.add('visible');
+    }
+
+    function clearErrors() {
+      document.querySelectorAll('.error-message').forEach(el => {
+        el.textContent = '';
+        el.classList.remove('visible');
+      });
+    }
+
+    passwordInput.addEventListener('input', () => updateStrengthIndicator(passwordInput.value));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearErrors();
+
+      const username = usernameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const confirm = confirmInput.value;
+
+      let hasError = false;
+
+      const usernameErr = validateUsername(username);
+      if (usernameErr) { showError('usernameError', usernameErr); hasError = true; }
+
+      const emailErr = validateEmail(email);
+      if (emailErr) { showError('emailError', emailErr); hasError = true; }
+
+      const strength = getPasswordStrength(password);
+      if (strength < 4) { showError('passwordError', 'Please create a stronger password'); hasError = true; }
+
+      if (password !== confirm) { showError('confirmError', 'Passwords do not match'); hasError = true; }
+
+      if (hasError) return;
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Creating Account...';
+
+      await new Promise(r => setTimeout(r, 2000));
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Create Account';
+      form.style.display = 'none';
+      successContainer.style.display = 'block';
+      usernameDisplay.textContent = username;
+    });
+
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      alert('跳转到登录页面：login-preview.html');
+    });
+
+    document.getElementById('continueBtn').addEventListener('click', () => {
+      alert('跳转到仪表盘页面');
+    });
+
+    [usernameInput, emailInput].forEach(input => {
+      input.addEventListener('input', () => {
+        document.getElementById(input.id + 'Error').classList.remove('visible');
+      });
+    });
+  </script>
+</body>
+</html>

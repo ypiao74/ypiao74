@@ -18,7 +18,7 @@ log() {
 # 派生新的智能体任务
 spawn_agent() {
     local task_id="$1"
-    local agent_type="$2"  # codex | claude | gemini
+    local agent_type="${2:-qwen}"  # 默认使用 qwen
     local branch_name="$3"
     local description="$4"
     local context_file="$5"
